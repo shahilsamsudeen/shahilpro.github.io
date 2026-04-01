@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shahil — Portfolio DevOps</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --accent: #0ea5e9;
+      --accent2: #7c3aed;
+      --text: #0f172a;
+      --muted: #64748b;
+      --green: #059669;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    code { font-weight: 400; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(14,165,233,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14,165,233,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(248,250,252,0.95);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .nav-logo { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; letter-spacing: 0.05em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero { padding: 100px 0 80px; position: relative; }
+    .hero-tag { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
+    .hero h1 { font-size: clamp(42px, 8vw, 72px); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { font-size: 18px; color: var(--muted); margin-bottom: 40px; max-width: 520px; line-height: 1.6; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: var(--green); padding: 10px 20px; border-radius: 100px; font-family: 'Space Mono', monospace; font-size: 13px; margin-bottom: 40px; }
+    .hero-badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn { padding: 14px 28px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 13px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: var(--accent); color: var(--bg); font-weight: 700; }
+    .btn-primary:hover { background: #0284c7; transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* SECTION */
+    .section-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    section { padding: 80px 0; border-top: 1px solid var(--border); }
+    section h2 { font-size: 36px; font-weight: 800; margin-bottom: 48px; letter-spacing: -0.02em; }
+
+    /* PROJECT CARD */
+    .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; margin-bottom: 24px; transition: border-color 0.2s, transform 0.2s; }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+    .project-title { font-size: 22px; font-weight: 800; }
+    .project-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 28px; }
+    .project-tag { font-family: 'Space Mono', monospace; font-size: 11px; padding: 6px 14px; border-radius: 100px; background: rgba(14,165,233,0.1); color: var(--accent); border: 1px solid rgba(14,165,233,0.2); }
+    .project-role { font-family: 'Space Mono', monospace; font-size: 11px; padding: 6px 14px; border-radius: 100px; background: rgba(124,58,237,0.08); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .project-duration { font-family: 'Space Mono', monospace; font-size: 11px; padding: 6px 14px; border-radius: 100px; background: rgba(5,150,105,0.08); color: var(--green); border: 1px solid rgba(5,150,105,0.2); }
+
+    /* =====================
+       STAR GRID — style uniforme sur toutes les cases
+    ===================== */
+    .star-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      overflow: visible;
+    }
+    @media (max-width: 600px) { .star-grid { grid-template-columns: 1fr; } }
+
+    .star-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px 32px;
+      overflow: visible;
+    }
+    .star-letter {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .star-letter::before {
+      content: '';
+      width: 3px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .star-content {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.85;
+      overflow: visible;
+    }
+    .star-content ul {
+      padding-left: 18px;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .star-content li {
+      font-size: 13.5px;
+    }
+
+    /* SCREENSHOTS */
+    .visual-section {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+    .visual-section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 600px) { .screenshots-grid { grid-template-columns: repeat(2, 1fr); } }
+    .screenshot-item {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #fff8f0;
+      padding: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+    .screenshot-item:hover { transform: scale(1.04); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .screenshot-item img { width: 100%; height: 86px; object-fit: cover; border-radius: 7px; display: block; }
+    .screenshot-caption { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 7px; }
+
+    /* CODE BLOCK */
+    .code-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 650px) { .code-grid { grid-template-columns: 1fr; } }
+    .code-block {
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+    }
+    .code-filename {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .code-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .code-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+    .code-body {
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .code-body pre {
+      font-family: 'Space Mono', monospace;
+      font-size: 11.5px;
+      line-height: 1.7;
+      color: #e2e8f0;
+      white-space: pre;
+      margin: 0;
+    }
+    /* Syntax colors */
+    .c-tag { color: #7dd3fc; }
+    .c-attr { color: #fbbf24; }
+    .c-val { color: #86efac; }
+    .c-prop { color: #c4b5fd; }
+    .c-rule { color: #7dd3fc; }
+    .c-comment { color: #475569; font-style: italic; }
+    .c-num { color: #fb923c; }
+
+    /* TOOLS */
+    .project-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px; }
+    .tool-badge { font-family: 'Space Mono', monospace; font-size: 11px; padding: 5px 12px; border-radius: 6px; background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } }
+    .skills-block { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+    .skills-block h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: var(--accent); font-family: 'Space Mono', monospace; }
+    .skill-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .skill-item:last-child { border-bottom: none; }
+    .skill-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .skill-icon.blue { background: rgba(14,165,233,0.1); }
+    .skill-icon.purple { background: rgba(124,58,237,0.1); }
+    .skill-icon.green { background: rgba(16,185,129,0.1); }
+
+    /* FOOTER */
+    footer { padding: 48px 0; border-top: 1px solid var(--border); text-align: center; }
+    footer p { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.6s forwards; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <div class="nav-logo">shahil.dev</div>
+      <ul class="nav-links">
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#outils">Compétences</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- SECTION A : INTRODUCTION -->
+  <section class="hero" style="border-top: none;">
+    <div class="container">
+      <p class="hero-tag fade-in">Portfolio · Bachelor 1 · CNAM</p>
+      <h1 class="fade-in delay-1">Shahil<br/><span>DevOps</span><br/>Engineer</h1>
+      <p class="hero-subtitle fade-in delay-2">
+        Étudiant en informatique spécialisé DevOps au CNAM.<br/>
+        Passionné par le développement web et l'automatisation.
+      </p>
+      <div class="hero-badge fade-in delay-2">En recherche de stage — Informatique / DevOps</div>
+      <div class="hero-ctas fade-in delay-3">
+        <a href="https://www.linkedin.com/in/samsudeenshahil" class="btn btn-primary" target="_blank">🔗 LinkedIn</a>
+        <a href="https://github.com/shahil" class="btn btn-outline" target="_blank">⚙️ GitHub</a>
+        <a href=https://shahilsamsudeen.github.io/shahilpro.github.io/SAMSUDEEN_shahil_CV.pdf download="SAMSUDEEN_shahil_CV.pdf" class="btn btn-outline">📄 Télécharger mon CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION B : PROJETS -->
+  <section id="projets">
+    <div class="container">
+      <p class="section-label">02 — Les Projets</p>
+      <h2>Ce que j'ai fait</h2>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h3 class="project-title">🌐 Site web de recettes — "On cuisine quoi ?"</h3>
+        </div>
+        <div class="project-meta">
+          <span class="project-tag">Projet de cours — CNAM</span>
+          <span class="project-role">👤 Créateur & Développeur unique</span>
+          <span class="project-duration">⏱ 2 jours</span>
+        </div>
+
+        <!-- STAR GRID -->
+        <div class="star-grid">
+
+          <div class="star-item">
+            <p class="star-letter">S — Situation</p>
+            <p class="star-content">
+              Dans le cadre d'un projet imposé en première année de Bachelor Informatique au CNAM, je devais mettre en pratique mes bases en HTML/CSS sur un projet réel et complet. J'avais déjà abordé le HTML/CSS en cours, mais jamais sur un projet aussi complet avec navigation inter-pages, formulaire et design cohérent. Le défi : livrer un projet propre, fonctionnel et bien organisé, seul, en seulement 2 jours.
+            </p>
+          </div>
+
+          <div class="star-item">
+            <p class="star-letter">T — Tâche</p>
+            <p class="star-content">
+              Le problème à résoudre : créer un site web de recettes multipage, cohérent visuellement et fonctionnel, en partant de zéro. Le site devait inclure :
+              <ul>
+                <li>Une page d'accueil avec galerie de recettes</li>
+                <li>Des pages de recettes individuelles</li>
+                <li>Un formulaire de contact opérationnel</li>
+                <li>Une page FAQ structurée</li>
+              </ul>
+            </p>
+          </div>
+
+          <div class="star-item">
+            <p class="star-letter">A — Action</p>
+            <p class="star-content">
+              J'ai d'abord conçu l'arborescence des fichiers sur papier avant de coder, puis avancé page par page en commençant par les éléments communs (header, CSS global).
+              <ul>
+                <li>Arborescence HTML/CSS séparés par page</li>
+                <li>CSS Grid 3 colonnes responsive (mobile → desktop)</li>
+                <li>Header commun et navigation inter-pages</li>
+                <li>Cartes cliquables avec images intégrées</li>
+                <li>Formulaire de contact avec validation HTML5</li>
+              </ul>
+            </p>
+          </div>
+
+          <div class="star-item">
+            <p class="star-letter">R — Résultat</p>
+            <p class="star-content">
+              Site web complet avec 6 recettes, responsive mobile/tablette/desktop, livré en 2 jours dans les délais imposés. Projet validé dans le cadre du cours, et retenu comme pièce maîtresse de ce portfolio — preuve concrète de ma capacité à mener un projet web de A à Z en autonomie totale.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- PREUVES VISUELLES -->
+        <div class="visual-section">
+          <p class="visual-section-label">📸 Aperçu — les recettes du site</p>
+          <div class="screenshots-grid">
+            <div class="screenshot-item">
+              <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdckc1AnmBwxUlXelHClYHB3cMnrfssff55A&s alt="Tasty Crousty"/>
+              <p class="screenshot-caption">Tasty Crousty</p>
+            </div>
+            <div class="screenshot-item">
+              <img src=https://recettes.precuttech.com/wp-content/uploads/2025/03/Salade-Cesar-Poulet-Pane-1.jpg alt="Salade César"/>
+              <p class="screenshot-caption">Salade César</p>
+            </div>
+            <div class="screenshot-item">
+              <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQG5lIDln2M6kTfIL9jzzSussaylvTsoS3GVw&s alt="Couscous"/>
+              <p class="screenshot-caption">Couscous</p>
+            </div>
+            <div class="screenshot-item">
+              <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJeiPeJmP3mbYZLLJ_ACcNgGz56KvhFK92Ag&s alt="Sushi"/>
+              <p class="screenshot-caption">Sushi</p>
+            </div>
+          </div>
+
+          <!-- CODE SNIPPETS -->
+          <p class="visual-section-label" style="margin-top: 8px;">💻 Extraits de code</p>
+          <div class="code-grid">
+
+            <!-- HTML snippet -->
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <span class="code-filename">index.html</span>
+              </div>
+              <div class="code-body"><pre><span class="c-comment">&lt;!-- Grille de recettes --&gt;</span>
+<span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-val">"grille"</span><span class="c-tag">&gt;</span>
+
+  <span class="c-tag">&lt;a</span> <span class="c-attr">href</span>=<span class="c-val">"recette/crousty.html"</span>
+     <span class="c-attr">class</span>=<span class="c-val">"carte"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-val">"carte-image-conteneur"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;img</span> <span class="c-attr">src</span>=<span class="c-val">"image/tastycrousty.jpeg"</span>
+           <span class="c-attr">class</span>=<span class="c-val">"carte-image"</span><span class="c-tag">/&gt;</span>
+    <span class="c-tag">&lt;/div&gt;</span>
+    <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-val">"carte-texte"</span><span class="c-tag">&gt;</span>
+      <span class="c-tag">&lt;h2&gt;</span>Tasty Crousty<span class="c-tag">&lt;/h2&gt;</span>
+      <span class="c-tag">&lt;p&gt;</span>20 min · 1 personne<span class="c-tag">&lt;/p&gt;</span>
+    <span class="c-tag">&lt;/div&gt;</span>
+  <span class="c-tag">&lt;/a&gt;</span>
+
+  <span class="c-comment">&lt;!-- ... 5 autres cartes --&gt;</span>
+<span class="c-tag">&lt;/div&gt;</span></pre></div>
+            </div>
+
+            <!-- CSS snippet -->
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <span class="code-filename">monsite.css</span>
+              </div>
+              <div class="code-body"><pre><span class="c-comment">/* Grille responsive 3 colonnes */</span>
+<span class="c-rule">.grille</span> {
+  <span class="c-prop">display</span>: grid;
+  <span class="c-prop">grid-template-columns</span>: repeat(<span class="c-num">3</span>, <span class="c-num">1</span>fr);
+  <span class="c-prop">gap</span>: <span class="c-num">20</span>px;
+  <span class="c-prop">max-width</span>: <span class="c-num">900</span>px;
+  <span class="c-prop">margin</span>: <span class="c-num">0</span> auto;
+}
+
+<span class="c-comment">/* Carte recette */</span>
+<span class="c-rule">.carte</span> {
+  <span class="c-prop">border-radius</span>: <span class="c-num">15</span>px;
+  <span class="c-prop">box-shadow</span>: <span class="c-num">0 4</span>px <span class="c-num">10</span>px rgba(<span class="c-num">0,0,0,0.1</span>);
+  <span class="c-prop">transition</span>: <span class="c-num">0.2</span>s;
+}
+<span class="c-rule">.carte:hover</span> {
+  <span class="c-prop">transform</span>: translateY(-<span class="c-num">5</span>px);
+}
+
+<span class="c-comment">/* Header dégradé */</span>
+<span class="c-rule">header</span> {
+  <span class="c-prop">background</span>: linear-gradient(
+    <span class="c-num">90</span>deg, <span class="c-val">#59A3E9</span>, <span class="c-val">#9820F4</span>
+  );
+}</pre></div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="project-tools">
+          <span class="tool-badge">HTML5</span>
+          <span class="tool-badge">CSS3</span>
+          <span class="tool-badge">CSS Grid</span>
+          <span class="tool-badge">Responsive Design</span>
+          <span class="tool-badge">Formulaire HTML5</span>
+          <span class="tool-badge">Projet multi-pages</span>
+        </div>
+      </div>
+
+      <!-- PROJET 2 : MORPION EN C -->
+      <div class="project-card">
+        <div class="project-header">
+          <h3 class="project-title">♟️ Jeu de Morpion — Langage C</h3>
+        </div>
+        <div class="project-meta">
+          <span class="project-tag">Projet de cours — CNAM</span>
+          <span class="project-role">👤 Développeur unique</span>
+          <span class="project-duration">⏱ Langage C</span>
+        </div>
+
+        <!-- STAR GRID -->
+        <div class="star-grid">
+
+          <div class="star-item">
+            <p class="star-letter">S — Situation</p>
+            <p class="star-content">
+              Dans le cadre de mon cours de programmation en C au CNAM, j'ai dû implémenter un jeu de morpion complet en terminal. Le langage C, avec sa gestion manuelle de la mémoire et son absence de bibliothèques natives pour les interfaces, imposait une rigueur algorithmique stricte. Le défi : modéliser la logique complète du jeu (détection de victoire, alternance des joueurs, validation des saisies) sans aucun framework.
+            </p>
+          </div>
+
+          <div class="star-item">
+            <p class="star-letter">T — Tâche</p>
+            <p class="star-content">
+              Concevoir et implémenter un jeu de morpion interactif en ligne de commande capable de :
+              <ul>
+                <li>Gérer une grille 3×3 représentée en tableau de 9 cases</li>
+                <li>Détecter toute combinaison gagnante (lignes, colonnes, diagonales)</li>
+                <li>Valider les saisies et refuser les cases déjà prises</li>
+                <li>Afficher la grille après chaque coup et annoncer le vainqueur</li>
+              </ul>
+            </p>
+          </div>
+
+          <div class="star-item">
+            <p class="star-letter">A — Action</p>
+            <p class="star-content">
+              J'ai découpé le problème en fonctions pures et indépendantes, conformément aux bonnes pratiques du C procédural.
+              <ul>
+                <li>Représentation de la grille sous forme d'un <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">char[9]</code> initialisé à <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">'_'</code></li>
+                <li>4 fonctions de détection : <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">ligneIdentique</code>, <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">colonneIdentique</code>, <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">diag1Identique</code>, <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">diag2Identique</code></li>
+                <li>Boucle principale avec double condition d'arrêt (victoire ou 9 coups)</li>
+                <li>Validation de la saisie en boucle <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);font-weight:400;">while</code> imbriquée</li>
+              </ul>
+            </p>
+          </div>
+
+          <div class="star-item">
+            <p class="star-letter">R — Résultat</p>
+            <p class="star-content">
+              Programme fonctionnel, robuste et bien structuré : aucun bug de détection de victoire, gestion complète des cas limites (case invalide, partie nulle). Le découpage en fonctions a rendu le code lisible et facilement testable. Ce projet m'a permis de maîtriser la logique procédurale, la manipulation de tableaux en C et la gestion de boucles imbriquées — des fondamentaux essentiels pour un développeur.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- PREUVES VISUELLES -->
+        <div class="visual-section">
+
+          <!-- TERMINAL OUTPUT -->
+          <p class="visual-section-label">🖥️ Aperçu — Déroulement d'une partie</p>
+          <div class="code-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 20px;">
+
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <span class="code-filename">terminal — partie en cours</span>
+              </div>
+              <div class="code-body"><pre><span class="c-comment">$ ./morpion</span>
+
+<span class="c-val">_ _ _</span>
+<span class="c-val">_ _ _</span>
+<span class="c-val">_ _ _</span>
+<span class="c-prop">Joueur x ? </span><span class="c-num">5</span>
+
+<span class="c-val">_ _ _</span>
+<span class="c-val">_ x _</span>
+<span class="c-val">_ _ _</span>
+<span class="c-prop">Joueur o ? </span><span class="c-num">1</span>
+
+<span class="c-val">o _ _</span>
+<span class="c-val">_ x _</span>
+<span class="c-val">_ _ _</span>
+<span class="c-prop">Joueur x ? </span><span class="c-num">9</span>
+
+<span class="c-val">o _ _</span>
+<span class="c-val">_ x _</span>
+<span class="c-val">_ _ x</span>
+<span class="c-comment">...</span></pre></div>
+            </div>
+
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <span class="code-filename">terminal — fin de partie</span>
+              </div>
+              <div class="code-body"><pre><span class="c-comment">/* x joue la diagonale */</span>
+
+<span class="c-val">o _ _</span>
+<span class="c-val">_ x _</span>
+<span class="c-val">_ _ _</span>
+<span class="c-prop">Joueur x ? </span><span class="c-num">3</span>
+
+<span class="c-comment"> case invalide ou deja</span>
+<span class="c-comment"> prise, rejouer :</span>
+<span class="c-prop">Joueur x ? </span><span class="c-num">7</span>
+
+<span class="c-val">o _ _</span>
+<span class="c-val">_ x _</span>
+<span class="c-val">x _ x</span>
+<span class="c-prop">Joueur x ? </span><span class="c-num">4</span>
+
+<span class="c-val">o _ _</span>
+<span class="c-val">x x _</span>
+<span class="c-val">x _ x</span>
+<span class="c-tag"> victoire du joueur x !</span></pre></div>
+            </div>
+
+          </div>
+
+          <!-- CODE SNIPPETS -->
+          <p class="visual-section-label">💻 Extraits de code</p>
+          <div class="code-grid">
+
+            <!-- Détection victoire -->
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <span class="code-filename">miniprojet.c — détection victoire</span>
+              </div>
+              <div class="code-body"><pre><span class="c-comment">/* Vérifie si une ligne est gagnante */</span>
+<span class="c-tag">BOOL</span> <span class="c-rule">ligneIdentique</span>(<span class="c-tag">char</span> grille[], <span class="c-tag">int</span> ligne) {
+  <span class="c-tag">char</span> c = grille[ligne * <span class="c-num">3</span>];
+  <span class="c-prop">return</span> (c != <span class="c-val">'_'</span>)
+      && (c == grille[ligne * <span class="c-num">3</span> + <span class="c-num">1</span>])
+      && (c == grille[ligne * <span class="c-num">3</span> + <span class="c-num">2</span>]);
+}
+
+<span class="c-comment">/* Vérifie toutes les combinaisons */</span>
+<span class="c-tag">BOOL</span> <span class="c-rule">testGagne</span>(<span class="c-tag">char</span> grille[]) {
+  <span class="c-prop">if</span> (ligneIdentique(grille, <span class="c-num">0</span>)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (ligneIdentique(grille, <span class="c-num">1</span>)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (ligneIdentique(grille, <span class="c-num">2</span>)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (colonneIdentique(grille, <span class="c-num">0</span>)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (colonneIdentique(grille, <span class="c-num">1</span>)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (colonneIdentique(grille, <span class="c-num">2</span>)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (diag1Identique(grille)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">if</span> (diag2Identique(grille)) <span class="c-prop">return</span> <span class="c-num">TRUE</span>;
+  <span class="c-prop">return</span> <span class="c-num">FALSE</span>;
+}</pre></div>
+            </div>
+
+            <!-- Boucle principale -->
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <span class="code-filename">miniprojet.c — boucle principale</span>
+              </div>
+              <div class="code-body"><pre><span class="c-comment">/* Boucle tant que pas gagné */</span>
+<span class="c-prop">while</span> (pasGagne && casesLibres) {
+
+  afficheGrille(grille);
+
+  <span class="c-comment">/* Valider la saisie joueur */</span>
+  casecochee = lireInt();
+  <span class="c-prop">while</span> (casecochee < <span class="c-num">1</span>
+      || casecochee > <span class="c-num">9</span>
+      || grille[casecochee-<span class="c-num">1</span>] != <span class="c-val">'_'</span>) {
+    casecochee = lireInt();
+  }
+
+  <span class="c-comment">/* Jouer le coup */</span>
+  grille[casecochee - <span class="c-num">1</span>] = joueur;
+  nbCoupsJoues++;
+
+  <span class="c-prop">if</span> (testGagne(grille))
+    pasGagne = <span class="c-num">FALSE</span>;
+  <span class="c-prop">if</span> (nbCoupsJoues == <span class="c-num">9</span>)
+    casesLibres = <span class="c-num">FALSE</span>;
+
+  <span class="c-comment">/* Alterner les joueurs */</span>
+  joueur = (joueur == <span class="c-val">'x'</span>) ? <span class="c-val">'o'</span> : <span class="c-val">'x'</span>;
+}</pre></div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="project-tools">
+          <span class="tool-badge">Langage C</span>
+          <span class="tool-badge">Algorithmique</span>
+          <span class="tool-badge">Tableaux & pointeurs</span>
+          <span class="tool-badge">Fonctions booléennes</span>
+          <span class="tool-badge">Boucles imbriquées</span>
+          <span class="tool-badge">Programme terminal</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION C : BOÎTE À OUTILS -->
+  <section id="outils">
+    <div class="container">
+      <p class="section-label">03 — La Boîte à Outils</p>
+      <h2>Mes compétences</h2>
+      <div class="skills-grid">
+        <div class="skills-block">
+          <h3>⚙️ Hard Skills</h3>
+          <div class="skill-item"><div class="skill-icon blue">🌐</div><span>HTML5 / CSS3</span></div>
+          <div class="skill-item"><div class="skill-icon blue">💻</div><span>Langage C</span></div>
+          <div class="skill-item"><div class="skill-icon purple">🔧</div><span>DevOps (en formation)</span></div>
+          <div class="skill-item"><div class="skill-icon green">📊</div><span>Microsoft Excel</span></div>
+          <div class="skill-item"><div class="skill-icon green">📝</div><span>Microsoft Word / PowerPoint</span></div>
+        </div>
+        <div class="skills-block">
+          <h3>🧠 Soft Skills</h3>
+          <div class="skill-item"><div class="skill-icon blue">🎯</div><span>Autonomie — site réalisé seul en 2 jours</span></div>
+          <div class="skill-item"><div class="skill-icon purple">🔍</div><span>Curiosité & apprentissage rapide</span></div>
+          <div class="skill-item"><div class="skill-icon green">📐</div><span>Rigueur & organisation (arborescence projet)</span></div>
+          <div class="skill-item"><div class="skill-icon blue">🤝</div><span>Travail en équipe</span></div>
+          <div class="skill-item"><div class="skill-icon purple">💡</div><span>Résolution de problèmes</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container" style="text-align: center;">
+      <p class="section-label" style="justify-content: center;">04 — Contact</p>
+      <h2 style="margin-bottom: 16px;">Travaillons ensemble</h2>
+      <p style="color: var(--muted); margin-bottom: 40px; font-size: 16px;">
+        Je suis disponible pour un stage en informatique / DevOps.<br/>
+        N'hésitez pas à me contacter !
+      </p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://www.linkedin.com/in/samsudeenshahil" class="btn btn-primary" target="_blank">🔗 LinkedIn</a>
+        <a href="/cdn-cgi/l/email-protection#f2819a939a9b9e81939f81879697979cb2959f939b9edc919d9f" class="btn btn-outline">✉️ M'envoyer un email</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 Shahil — Étudiant DevOps au Cnam</p>
+    </div>
+  </footer>
+</body>
+</html>
